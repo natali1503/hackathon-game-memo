@@ -65,11 +65,11 @@ function reducer(state, action) {
             pictureOpen: ++state.game.pictureOpen,
             pictureLayout: changeStatusPicture(
               state.game.pictureLayout,
-              action.payload,
+              action.payload
             ),
             numberPictureOpen: [
               ...state.game.numberPictureOpen,
-              action.payload,
+              action.payload
             ],
           },
         };
@@ -97,7 +97,7 @@ function reducer(state, action) {
           ...state.game,
           pictureLayout: changeStatusPicture(
             state.game.pictureLayout,
-            action.payload,
+            action.payload
           ),
           pictureOpen: 0,
           numberPictureOpen: [],

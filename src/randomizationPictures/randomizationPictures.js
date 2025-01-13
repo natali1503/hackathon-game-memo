@@ -50,7 +50,7 @@ let imagePaths = [
   './images/025-fox.svg',
   './images/036-zebra.svg',
   './images/038-elephant.svg',
-  './images/040-hippopotamus.svg',
+  './images/040-hippopotamus.svg'
 ];
 
 export function randomArrPicture() {

@@ -41,8 +41,8 @@ function GamingField() {
       dispatch,
       pictureLayout,
       isShowHistory,
-      afterIsShowHistory,
-    ],
+      afterIsShowHistory
+    ]
   );
 
   return (
