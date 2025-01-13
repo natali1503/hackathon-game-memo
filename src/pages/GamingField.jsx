@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import Picture from "../ui/Picture";
-import { usePicture } from "../context/PictureContext";
-import Navigate from "../ui/Navigate";
+import { useEffect } from 'react';
+import Picture from '../ui/Picture';
+import { usePicture } from '../context/PictureContext';
+import Navigate from '../ui/Navigate';
 
 function GamingField() {
   const {
@@ -23,13 +23,13 @@ function GamingField() {
         if (onePicturePosition === twoPicturePosition) return;
         else if (onePictureId === twoPictureId) {
           dispatch({
-            type: "picturesMatched",
+            type: 'picturesMatched',
             payload: [onePicturePosition, twoPicturePosition],
           });
         } else if (!isShowHistory) {
           setTimeout(() => {
             dispatch({
-              type: "pictureClose",
+              type: 'pictureClose',
               payload: [onePicturePosition, twoPicturePosition],
             });
           }, 1000);
@@ -42,15 +42,15 @@ function GamingField() {
       pictureLayout,
       isShowHistory,
       afterIsShowHistory,
-    ]
+    ],
   );
 
   return (
     <main>
-      <div className="wrapper">
-        <div className="main__wrapper">
+      <div className='wrapper'>
+        <div className='main__wrapper'>
           <Navigate />
-          <div className="board">
+          <div className='board'>
             {pictureLayout.map((picture) => (
               <Picture
                 key={picture.position}

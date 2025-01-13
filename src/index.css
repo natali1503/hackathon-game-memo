@@ -15,7 +15,7 @@
 }
 
 body {
-  font-family: "roboto mono", sans-serif;
+  font-family: 'roboto mono', sans-serif;
   background-color: var(--color-back);
 }
 
@@ -69,7 +69,9 @@ header h1 {
   border: none;
   cursor: pointer;
   font-size: 35px;
-  transition: opacity 0.3s, scale 0.3s;
+  transition:
+    opacity 0.3s,
+    scale 0.3s;
 }
 
 .startBtn:hover {
@@ -124,7 +126,9 @@ main {
   width: 120px;
   height: 120px;
   border-radius: 15px;
-  transition: scale 0.3s, background 0.5s;
+  transition:
+    scale 0.3s,
+    background 0.5s;
 }
 .pictureImg {
   width: 100%;
@@ -229,7 +233,9 @@ footer {
     url(../public/images/SquirellRight.svg);
   background-repeat: no-repeat;
   background-size: 50% 50%;
-  background-position: -20%, 120% 60%;
+  background-position:
+    -20%,
+    120% 60%;
 }
 
 .flip-animation {
