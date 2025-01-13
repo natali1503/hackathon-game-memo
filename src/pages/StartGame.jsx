@@ -1,3 +1,4 @@
+import { actionTypes } from '../constants/actionTypes';
 import { usePicture } from '../context/PictureContext';
 import Button from '../ui/Button';
 
@@ -7,9 +8,10 @@ function StartGame() {
     <div className='startWrapper'>
       <Button
         className='startBtn'
-        onClick={() => dispatch({ type: 'startGame' })}
-        children={'Начать игру'}
-      />
+        onClick={() => dispatch({ type: actionTypes.START_GAME })}
+      >
+        Начать игру
+      </Button>
       <h2>
         Открывай по очереди карточки, запоминай какие зверюшки там появляются и
         найди всех повторяющихся

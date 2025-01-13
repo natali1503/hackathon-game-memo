@@ -1,3 +1,4 @@
+import { actionTypes } from '../constants/actionTypes';
 import { usePicture } from '../context/PictureContext';
 import Button from './Button';
 import Reset from './Reset';
@@ -7,22 +8,14 @@ import { useStopwatch } from 'react-timer-hook';
 function Navigate() {
   const { gameStarted, dispatch, moves, isShowHistory, movesAll } =
     usePicture();
-  const {
-    totalSeconds,
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    reset,
-  } = useStopwatch({ autoStart: false });
+  const { totalSeconds, seconds, minutes, hours, start, pause, reset } =
+    useStopwatch({ autoStart: false });
   useEffect(() => {
-    dispatch({ type: 'time', payload: t() });
+    dispatch({ type: actionTypes.TIME, payload: t() });
   }, [totalSeconds]);
 
   useEffect(() => {
+    console.log(gameStarted, isShowHistory);
     if (gameStarted && !isShowHistory) {
       start();
     } else {
@@ -48,10 +41,17 @@ function Navigate() {
           </div>
         )}
         {gameStarted && !isShowHistory && <div className='turns'>{t()}</div>}
-        {gameStarted && <Reset onClick={() => dispatch({ type: 'reset' })} />}
+        {gameStarted && (
+          <Reset
+            onClick={() => {
+              dispatch({ type: actionTypes.RESET });
+              reset();
+            }}
+          />
+        )}
         {isShowHistory && (
           <Button
-            onClick={() => dispatch({ type: 'showHistory' })}
+            onClick={() => dispatch({ type: actionTypes.SHOW_HISTORY })}
             className='nextBtn'
           ></Button>
         )}

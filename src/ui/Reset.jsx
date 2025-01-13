@@ -1,9 +1,11 @@
 import reset from '../assets/icons/refresh.svg';
+import Button from './Button';
+
 function Reset({ onClick }) {
   return (
-    <button className='resetBtn' onClick={onClick}>
+    <Button className='resetBtn' onClick={onClick}>
       <img src={reset} alt={reset} />
-    </button>
+    </Button>
   );
 }
 

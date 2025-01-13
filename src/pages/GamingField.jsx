@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import Picture from '../ui/Picture';
 import { usePicture } from '../context/PictureContext';
 import Navigate from '../ui/Navigate';
+import { actionTypes } from '../constants/actionTypes';
+import { Field } from '../ui/Field';
 
 function GamingField() {
   const {
@@ -11,55 +12,43 @@ function GamingField() {
     dispatch,
     afterIsShowHistory,
   } = usePicture();
-  useEffect(
-    function () {
-      if (numberPictureOpen.length < 2 || isShowHistory || afterIsShowHistory)
-        return;
-      else {
-        const onePicturePosition = pictureLayout[numberPictureOpen[0]].position;
-        const twoPicturePosition = pictureLayout[numberPictureOpen[1]].position;
-        const onePictureId = pictureLayout[numberPictureOpen[0]].id;
-        const twoPictureId = pictureLayout[numberPictureOpen[1]].id;
-        if (onePicturePosition === twoPicturePosition) return;
-        else if (onePictureId === twoPictureId) {
-          dispatch({
-            type: 'picturesMatched',
-            payload: [onePicturePosition, twoPicturePosition],
-          });
-        } else if (!isShowHistory) {
-          setTimeout(() => {
-            dispatch({
-              type: 'pictureClose',
-              payload: [onePicturePosition, twoPicturePosition],
-            });
-          }, 1000);
-        } else return;
-      }
-    },
-    [
-      numberPictureOpen,
-      dispatch,
-      pictureLayout,
-      isShowHistory,
-      afterIsShowHistory
-    ]
-  );
+  useEffect(() => {
+    if (numberPictureOpen.length < 2 || isShowHistory || afterIsShowHistory)
+      return;
+
+    const [firstIndex, secondIndex] = numberPictureOpen;
+    const firstPicture = pictureLayout[firstIndex];
+    const secondPicture = pictureLayout[secondIndex];
+
+    if (firstPicture.position === secondPicture.position) return;
+
+    if (firstPicture.id === secondPicture.id) {
+      dispatch({
+        type: actionTypes.PICTURES_MATCHED,
+        payload: [firstPicture.position, secondPicture.position],
+      });
+    } else {
+      setTimeout(() => {
+        dispatch({
+          type: actionTypes.PICTURE_CLOSE,
+          payload: [firstPicture.position, secondPicture.position],
+        });
+      }, 1000);
+    }
+  }, [
+    numberPictureOpen,
+    dispatch,
+    pictureLayout,
+    isShowHistory,
+    afterIsShowHistory
+  ]);
 
   return (
     <main>
       <div className='wrapper'>
         <div className='main__wrapper'>
           <Navigate />
-          <div className='board'>
-            {pictureLayout.map((picture) => (
-              <Picture
-                key={picture.position}
-                position={picture.position}
-                open={picture.open}
-                img={picture.img}
-              ></Picture>
-            ))}
-          </div>
+          <Field pictureLayout={pictureLayout} />
         </div>
       </div>
     </main>

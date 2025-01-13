@@ -110,7 +110,7 @@ main {
   width: 550px;
 }
 
-.board {
+.field {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -118,7 +118,6 @@ main {
 }
 
 .cell {
-  background-image: url(../assets/icons/paws.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -148,7 +147,6 @@ main {
 }
 
 .cell.active {
-  background-image: url(../assets/images/025-fox.svg);
   background-color: white;
 }
 
@@ -250,7 +248,7 @@ footer {
     justify-content: center;
   }
 
-  .board {
+  .field {
     gap: 8px;
   }
 

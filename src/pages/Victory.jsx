@@ -1,3 +1,4 @@
+import { actionTypes } from '../constants/actionTypes';
 import { usePicture } from '../context/PictureContext';
 import Button from '../ui/Button';
 
@@ -10,11 +11,14 @@ function Victory() {
       </h2>
       {time ? <p>время игры — {time}</p> : ''}
       <p>количество ходов — {moves}</p>
-      <Button onClick={() => dispatch({ type: 'reset' })} className='startBtn'>
+      <Button
+        onClick={() => dispatch({ type: actionTypes.RESET })}
+        className='startBtn'
+      >
         Попробовать ещё
       </Button>
       <Button
-        onClick={() => dispatch({ type: 'showHistory' })}
+        onClick={() => dispatch({ type: actionTypes.SHOW_HISTORY })}
         className='startBtn'
       >
         {!isShowHistory ? 'Показать историю партии' : 'Следующий ход'}
