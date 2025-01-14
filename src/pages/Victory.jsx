@@ -9,7 +9,7 @@ function Victory() {
       <h2 className='textVictory'>
         Ура! У тебя получилось открыть все карточки
       </h2>
-      {time ? <p>время игры — {time}</p> : ''}
+      {time ? <p>время игры — {time}</p> : 'Время неизвестно'}
       <p>количество ходов — {moves}</p>
       <Button
         onClick={() => dispatch({ type: actionTypes.RESET })}

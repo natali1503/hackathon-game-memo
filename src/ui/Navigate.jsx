@@ -15,7 +15,6 @@ function Navigate() {
   }, [totalSeconds]);
 
   useEffect(() => {
-    console.log(gameStarted, isShowHistory);
     if (gameStarted && !isShowHistory) {
       start();
     } else {
@@ -37,7 +36,9 @@ function Navigate() {
       <div className='main__header'>
         {gameStarted && (
           <div className='turns'>
-            {!isShowHistory ? `Ход ${moves}` : `Ход ${moves} из ${movesAll}`}
+            {!isShowHistory
+              ? `Ход ${moves}`
+              : `Ход ${moves + 1} из ${movesAll}`}
           </div>
         )}
         {gameStarted && !isShowHistory && <div className='turns'>{t()}</div>}
@@ -53,7 +54,8 @@ function Navigate() {
           <Button
             onClick={() => dispatch({ type: actionTypes.SHOW_HISTORY })}
             className='nextBtn'
-          ></Button>
+            disabled={moves + 1 === movesAll}
+          />
         )}
       </div>
     </>

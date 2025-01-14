@@ -1,6 +1,6 @@
-export function changeStatusPicture(arrPicture, arrPos) {
+export function changeStatusPicture(arrPicture, arrPicturePositions) {
   const newArrPicture = arrPicture.map((picture) => {
-    if (picture.position === arrPos[0] || picture.position === arrPos[1])
+    if (arrPicturePositions.includes(picture.position))
       return { ...picture, open: !picture.open };
     else return picture;
   });

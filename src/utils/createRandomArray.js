@@ -3,22 +3,20 @@ import { generateRandomNumber } from './generateRandomNumber';
 export function createRandomArray() {
   const numbersCount = {};
   const resultArray = [];
+  const maxOccurrences = 2;
 
-  for (let i = 0; i < 16; i++) {
-    let randomNumber = generateRandomNumber();
-    while (randomNumber === resultArray[i - 1]) {
-      randomNumber = generateRandomNumber();
-    }
-    while (numbersCount[randomNumber] >= 2) {
-      randomNumber = generateRandomNumber();
-    }
+  while (resultArray.length < 16) {
+    const randomNumber = generateRandomNumber();
+    const previousNumber = resultArray[resultArray.length - 1];
+    const currentCountNumber = numbersCount[randomNumber] || 0;
 
-    while (resultArray.filter((num) => num === randomNumber).length >= 2) {
-      randomNumber = generateRandomNumber();
+    if (
+      currentCountNumber < maxOccurrences &&
+      randomNumber !== previousNumber
+    ) {
+      resultArray.push(randomNumber);
+      numbersCount[randomNumber] = currentCountNumber + 1;
     }
-
-    resultArray.push(randomNumber);
-    numbersCount[randomNumber] = (numbersCount[randomNumber] || 0) + 1;
   }
 
   return resultArray;

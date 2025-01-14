@@ -38,28 +38,24 @@ function reducer(state, action) {
     }
     case actionTypes.PICTURE_OPEN: {
       if (state.game.pictureOpen === 2 || state.game.isGameOver) return state;
-      else if (
-        (state.game.numberPictureOpen.length === 1 &&
-          action.payload[0] === state.game.numberPictureOpen[0][0]) ||
-        state.game.isGameOver
+      if (
+        state.game.numberPictureOpen.length === 1 &&
+        action.payload[0] === state.game.numberPictureOpen[0][0]
       ) {
         return state;
-      } else
-        return {
-          ...state,
-          game: {
-            ...state.game,
-            pictureOpen: ++state.game.pictureOpen,
-            pictureLayout: changeStatusPicture(
-              state.game.pictureLayout,
-              action.payload
-            ),
-            numberPictureOpen: [
-              ...state.game.numberPictureOpen,
-              action.payload
-            ],
-          },
-        };
+      }
+      return {
+        ...state,
+        game: {
+          ...state.game,
+          pictureOpen: state.game.pictureOpen + 1,
+          pictureLayout: changeStatusPicture(
+            state.game.pictureLayout,
+            action.payload
+          ),
+          numberPictureOpen: [...state.game.numberPictureOpen, action.payload],
+        },
+      };
     }
     case actionTypes.PICTURES_MATCHED: {
       return {
@@ -67,7 +63,7 @@ function reducer(state, action) {
         game: {
           ...state.game,
           pictureOpen: 0,
-          moves: ++state.game.moves,
+          moves: state.game.moves + 1,
           numberPictureOpen: [],
           isGameOver: checkVictory(state.game.pictureLayout),
         },
@@ -88,7 +84,7 @@ function reducer(state, action) {
           ),
           pictureOpen: 0,
           numberPictureOpen: [],
-          moves: ++state.game.moves,
+          moves: state.game.moves + 1,
         },
 
         history: {
@@ -125,34 +121,30 @@ function reducer(state, action) {
           history: {
             ...state.history,
             isShowHistory: true,
-            currentStepHistory: ++state.history.currentStepHistory,
+            currentStepHistory: state.history.currentStepHistory + 1,
           },
         };
-      else {
-        if (
-          state.history.currentStepHistory - 1 ===
-          state.history.historyGame.length
-        ) {
-          return {
-            ...state,
-            game: { ...state.game, afterIsShowHistory: true, isGameOver: true },
-            history: {
-              ...state.history,
-              isShowHistory: false,
-              currentStepHistory: 0,
-            },
-          };
-        } else {
-          return {
-            ...state,
-            game: state.history.historyGame[state.history.currentStepHistory],
-            history: {
-              ...state.history,
-              currentStepHistory: ++state.history.currentStepHistory,
-            },
-          };
-        }
+      const isEndOfHistory =
+        state.history.currentStepHistory === state.history.historyGame.length;
+      if (isEndOfHistory) {
+        return {
+          ...state,
+          game: { ...state.game, afterIsShowHistory: true, isGameOver: true },
+          history: {
+            ...state.history,
+            isShowHistory: false,
+            currentStepHistory: 0,
+          },
+        };
       }
+      return {
+        ...state,
+        game: state.history.historyGame[state.history.currentStepHistory],
+        history: {
+          ...state.history,
+          currentStepHistory: state.history.currentStepHistory + 1,
+        },
+      };
     }
     case actionTypes.TIME: {
       return {
@@ -177,7 +169,9 @@ function PictureProvaider({ children }) {
     time,
     afterIsShowHistory,
   } = game;
-
+  const isGame = gameStarted && !isGameOver;
+  const startGame = !gameStarted && !isGameOver;
+  const isVictory = gameStarted && isGameOver;
   const { historyGame, isShowHistory } = history;
   const movesAll = history.historyGame.length;
   return (
@@ -190,10 +184,12 @@ function PictureProvaider({ children }) {
         moves,
         historyGame,
         isShowHistory,
-        isGameOver,
         dispatch,
         time,
         movesAll,
+        startGame,
+        isGame,
+        isVictory,
         afterIsShowHistory,
       }}
     >
