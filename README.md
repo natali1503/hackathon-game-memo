@@ -1,6 +1,6 @@
 # Мемори!
 
-[Открыть приложение](https://govyazina.github.io/junior-hackathon_team__14/)
+[Открыть приложение](https://natali1503.github.io/hackathon-game-memo/)
 
 ### Команда
 
