@@ -1,23 +1,24 @@
 import { generateRandomNumber } from './generateRandomNumber';
 
-export function createRandomArray() {
+export function createRandomArray(arrayLength = 16, maxOccurrences = 2) {
   const numbersCount = {};
   const resultArray = [];
-  const maxOccurrences = 2;
+  let attempts = 0;
+  const maxAttempts = 1000;
 
-  while (resultArray.length < 16) {
+  while (resultArray.length < arrayLength) {
+    if (attempts++ > maxAttempts) {
+      throw new Error('Unable to generate array within constraints');
+    }
+
     const randomNumber = generateRandomNumber();
     const previousNumber = resultArray[resultArray.length - 1];
-    const currentCountNumber = numbersCount[randomNumber] || 0;
+    const currentCount = numbersCount[randomNumber] || 0;
 
-    if (
-      currentCountNumber < maxOccurrences &&
-      randomNumber !== previousNumber
-    ) {
+    if (currentCount < maxOccurrences && randomNumber !== previousNumber) {
       resultArray.push(randomNumber);
-      numbersCount[randomNumber] = currentCountNumber + 1;
+      numbersCount[randomNumber] = currentCount + 1;
     }
   }
-
   return resultArray;
 }
