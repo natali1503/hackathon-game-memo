@@ -1,5 +1,8 @@
-import { createContext, useContext, useReducer } from "react";
-import { randomArrPicture } from "../randomizationPictures/randomizationPictures";
+import { createContext, useContext, useReducer } from 'react';
+import { randomArrPicture } from '../utils/randomizationPictures';
+import { changeStatusPicture } from '../utils/changeStatusPicture';
+import { checkVictory } from '../utils/checkVictory';
+import { actionTypes } from '../constants/actionTypes';
 
 const initialState = {
   game: {
@@ -10,7 +13,7 @@ const initialState = {
     numberPictureOpen: [], //индексы открытых картинок
     moves: 0, //счетчик ходов
     isGameOver: false,
-    time: "",
+    time: '',
   },
   history: {
     isShowHistory: false,
@@ -20,25 +23,9 @@ const initialState = {
 };
 const PictureContext = createContext();
 
-function checkVictory(arr) {
-  const temp = arr.filter((picture) => {
-    return picture.open === false;
-  });
-  return temp.length <= 0;
-}
-
-function changeStatusPicture(arrPicture, arrPos) {
-  const newArrPicture = arrPicture.map((picture) => {
-    if (picture.position === arrPos[0] || picture.position === arrPos[1])
-      return { ...picture, open: !picture.open };
-    else return picture;
-  });
-  return newArrPicture;
-}
-
 function reducer(state, action) {
   switch (action.type) {
-    case "startGame": {
+    case actionTypes.START_GAME: {
       return {
         ...state,
         game: {
@@ -49,38 +36,34 @@ function reducer(state, action) {
         },
       };
     }
-    case "pictureOpen": {
+    case actionTypes.PICTURE_OPEN: {
       if (state.game.pictureOpen === 2 || state.game.isGameOver) return state;
-      else if (
-        (state.game.numberPictureOpen.length === 1 &&
-          action.payload[0] === state.game.numberPictureOpen[0][0]) ||
-        state.game.isGameOver
+      if (
+        state.game.numberPictureOpen.length === 1 &&
+        action.payload[0] === state.game.numberPictureOpen[0][0]
       ) {
         return state;
-      } else
-        return {
-          ...state,
-          game: {
-            ...state.game,
-            pictureOpen: ++state.game.pictureOpen,
-            pictureLayout: changeStatusPicture(
-              state.game.pictureLayout,
-              action.payload
-            ),
-            numberPictureOpen: [
-              ...state.game.numberPictureOpen,
-              action.payload,
-            ],
-          },
-        };
+      }
+      return {
+        ...state,
+        game: {
+          ...state.game,
+          pictureOpen: state.game.pictureOpen + 1,
+          pictureLayout: changeStatusPicture(
+            state.game.pictureLayout,
+            action.payload
+          ),
+          numberPictureOpen: [...state.game.numberPictureOpen, action.payload],
+        },
+      };
     }
-    case "picturesMatched": {
+    case actionTypes.PICTURES_MATCHED: {
       return {
         ...state,
         game: {
           ...state.game,
           pictureOpen: 0,
-          moves: ++state.game.moves,
+          moves: state.game.moves + 1,
           numberPictureOpen: [],
           isGameOver: checkVictory(state.game.pictureLayout),
         },
@@ -90,7 +73,7 @@ function reducer(state, action) {
         },
       };
     }
-    case "pictureClose": {
+    case actionTypes.PICTURE_CLOSE: {
       return {
         ...state,
         game: {
@@ -101,7 +84,7 @@ function reducer(state, action) {
           ),
           pictureOpen: 0,
           numberPictureOpen: [],
-          moves: ++state.game.moves,
+          moves: state.game.moves + 1,
         },
 
         history: {
@@ -110,7 +93,7 @@ function reducer(state, action) {
         },
       };
     }
-    case "victory": {
+    case actionTypes.VICTORY: {
       return {
         ...state,
         history: {
@@ -120,7 +103,7 @@ function reducer(state, action) {
       };
     }
 
-    case "reset": {
+    case actionTypes.RESET: {
       return {
         ...initialState,
         game: {
@@ -130,7 +113,7 @@ function reducer(state, action) {
         },
       };
     }
-    case "showHistory": {
+    case actionTypes.SHOW_HISTORY: {
       if (!state.history.isShowHistory)
         return {
           ...state,
@@ -138,58 +121,58 @@ function reducer(state, action) {
           history: {
             ...state.history,
             isShowHistory: true,
-            currentStepHistory: ++state.history.currentStepHistory,
+            currentStepHistory: state.history.currentStepHistory + 1,
           },
         };
-      else {
-        if (
-          state.history.currentStepHistory - 1 ===
-          state.history.historyGame.length
-        ) {
-          return {
-            ...state,
-            game: { ...state.game, afterIsShowHistory: true, isGameOver: true },
-            history: {
-              ...state.history,
-              isShowHistory: false,
-              currentStepHistory: 0,
-            },
-          };
-        } else {
-          return {
-            ...state,
-            game: state.history.historyGame[state.history.currentStepHistory],
-            history: {
-              ...state.history,
-              currentStepHistory: ++state.history.currentStepHistory,
-            },
-          };
-        }
+      const isEndOfHistory =
+        state.history.currentStepHistory === state.history.historyGame.length;
+      if (isEndOfHistory) {
+        return {
+          ...state,
+          game: { ...state.game, afterIsShowHistory: true, isGameOver: true },
+          history: {
+            ...state.history,
+            isShowHistory: false,
+            currentStepHistory: 0,
+          },
+        };
       }
+      return {
+        ...state,
+        game: state.history.historyGame[state.history.currentStepHistory],
+        history: {
+          ...state.history,
+          currentStepHistory: state.history.currentStepHistory + 1,
+        },
+      };
     }
-    case "time": {
+    case actionTypes.TIME: {
       return {
         ...state,
         game: { ...state.game, time: action.payload },
       };
     }
     default:
-      throw new Error("Неизвестный тип");
+      throw new Error('Неизвестный тип');
   }
 }
 
 function PictureProvaider({ children }) {
   const [{ game, history }, dispatch] = useReducer(reducer, initialState);
-  const { gameStarted } = game;
-  const { pictureLayout } = game;
-  const { pictureOpen } = game;
-  const { numberPictureOpen } = game;
-  const { moves } = game;
-  const { isGameOver } = game;
-  const { historyGame } = history;
-  const { isShowHistory } = history;
-  const { time } = game;
-  const { afterIsShowHistory } = game;
+  const {
+    gameStarted,
+    pictureLayout,
+    pictureOpen,
+    numberPictureOpen,
+    moves,
+    isGameOver,
+    time,
+    afterIsShowHistory,
+  } = game;
+  const isGame = gameStarted && !isGameOver;
+  const startGame = !gameStarted && !isGameOver;
+  const isVictory = gameStarted && isGameOver;
+  const { historyGame, isShowHistory } = history;
   const movesAll = history.historyGame.length;
   return (
     <PictureContext.Provider
@@ -201,10 +184,12 @@ function PictureProvaider({ children }) {
         moves,
         historyGame,
         isShowHistory,
-        isGameOver,
         dispatch,
         time,
         movesAll,
+        startGame,
+        isGame,
+        isVictory,
         afterIsShowHistory,
       }}
     >
@@ -215,11 +200,9 @@ function PictureProvaider({ children }) {
 function usePicture() {
   const contex = useContext(PictureContext);
   if (contex === undefined)
-    throw new Error("PictureContext используется вне PictureProvider");
+    throw new Error('PictureContext используется вне PictureProvider');
 
   return contex;
 }
 
 export { PictureProvaider, usePicture };
-
-function openPictureForHistory(objPicture, arrPos) {}
