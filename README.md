@@ -31,7 +31,7 @@ React.js, HTML, CSS, JS
 
 #### 1. начальный экран с кратким описанием механики игры
 
-![img.png](img.png)
+![img.png](./screenshots/img.png)
 
 #### 2. экран с игровым полем
 
@@ -41,15 +41,15 @@ React.js, HTML, CSS, JS
 подсчет количества ходов;
 возможность начать игру заново;
 таймер;
-![img_1.png](img_1.png)
+![img_1.png](./screenshots/img_1.png)
 
 #### 3. экран поздравления с окончанием игры
 
-![img_3.png](img_3.png)
+![img_3.png](./screenshots/img_3.png)
 
 ### 3.1 добавлена история ходов с возможностью проигрывания хода партии
 
-![img_4.png](img_4.png)
+![img_4.png](./screenshots/img_4.png)
 
 ### Для локального запуска проекта:
 
